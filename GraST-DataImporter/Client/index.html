@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraST Plugin</title>
+    <script src="https://unpkg.com/shapefile@0.6.1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 6px solid #ccc;
+            border-top-color: #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: flex;
+        }
+
+
+        .container {
+            max-width: 540px;
+            margin: 0;
+            padding: 10px 40px 7px 37px;
+            background-color: #ffffff;
+            /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+            border: #6c757d 0.5px solid;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 15px;
+            padding-left: 2px;
+        }
+
+        .section h2 {
+            font-size: 1.05rem;
+            color: #444;
+            margin-bottom: 7px;
+            margin-left: -1.5px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 3px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            font-size: 0.9rem;
+            width: 100%;
+            padding: 6px 6px 6px 9px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .connection-btn {
+            background-color: #6c757d;
+        }
+
+        .connection-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .main-btn {
+            display: block;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 17px 0 0 0;
+            width: 100%;
+            background-color: #3a6b94;
+        }
+
+        .main-btn:hover {
+            background-color: #4275ac;
+        }
+
+        .result {
+            font-size: 0.9rem;
+            padding: 5px 9px;
+            color: #fff;
+            border-radius: 4px;
+            display: none;
+            margin-left: 10px;
+            max-width: 76%;
+        }
+
+        .success {
+            background-color: #28a745;
+        }
+
+        .error {
+            background-color: #dc3545;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .checkbox-group div {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 7px;
+            transform: scale(1.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-row .form-group input {
+            width: 100%;
+        }
+
+        #time-column-select-group {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        #time-column-select-group label {
+            margin: 0 10px 0 0;
+            color: #555;
+        }
+
+        #time-column-select {
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #custom-file-upload-btn {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        #custom-file-upload-btn:hover {
+            background-color: #5a6268;
+        }
+
+        #file-chosen {
+            margin-left: 5px;
+            font-size: 0.8rem;
+            color: #424040;
+        }
+
+        ::placeholder {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .visible {
+            visibility: visible;
+        }
+
+            #entity-type option[disabled] {
+        color: #999; /* 设置为灰色 */
+        font-size: 12px; /* 设置字体大小为12px */
+    }
+    </style>
+
+</head>
+<body>
+
+<div id="loading-spinner" class="loading-spinner hidden">
+    <div class="spinner"></div>
+</div>
+
+<div class="container">
+    <h1>GraST ETL Adaptor</h1>
+
+    <div class="section" style="margin-top: 16px">
+        <h2>Database Connection</h2>
+        <div class="form-group">
+            <label for="neo4j-address">Neo4j Database Address:</label>
+            <input type="text" id="neo4j-address"
+                   placeholder="Enter Neo4j database address (e.g., localhost:7687)"
+                   value="localhost:7687">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="neo4j-username">Neo4j Username:</label>
+                <input type="text" id="neo4j-username" placeholder="Enter Neo4j username" value="neo4j">
+            </div>
+            <div class="form-group">
+                <label for="neo4j-password">Neo4j Password:</label>
+                <input type="password" id="neo4j-password" placeholder="Enter Neo4j password" value="123456789">
+            </div>
+            <div class="form-group">
+                <label for="neo4j-database">Neo4j Database:</label>
+                <select id="neo4j-database">
+                </select>
+            </div>
+        </div>
+        <div class="form-group button-group">
+            <button class="connection-btn" onclick="NeoConnection('neo4j')">Connection</button>
+            <div id="neo4j-result" class="result"></div>
+        </div>
+        <div class="form-group">
+            <label for="postgis-address">PostGIS Database Address:</label>
+            <input type="text" id="postgis-address"
+                   placeholder="Enter PostGIS database address (e.g., localhost:5432)"
+                   value="localhost:5432">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="postgis-username">PostGIS Username:</label>
+                <input type="text" id="postgis-username" placeholder="Enter PostGIS username" value="postgres">
+            </div>
+            <div class="form-group">
+                <label for="postgis-password">PostGIS Password:</label>
+                <input type="password" id="postgis-password" placeholder="Enter PostGIS password" value="981031">
+            </div>
+            <div class="form-group">
+                <label for="postgis-database">PostGIS Database:</label>
+                <select id="postgis-database">
+                </select>
+            </div>
+        </div>
+        <div class="form-group button-group">
+            <button class="connection-btn" onclick="PgConnection('postgis')">Connection</button>
+            <div id="postgis-result" class="result"></div>
+        </div>
+    </div>
+
+    <div class="section" style="margin-top: 19px">
+        <h2>Data Import</h2>
+                <div class="form-row">
+                </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="entity-class">Geospatial Type:</label>
+                <select id="entity-type" style="padding: 6px 6px 6px 6px;">
+                    <option value="Point">Point</option>
+                    <option value="LineString">Line</option>
+                    <option value="Polygon">Polygon</option>
+                    <option value="Raster">Raster</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 2;">
+                <label for="entity-class">Entity Class (Table Name / Node Class):</label>
+                <input type="text" id="entity-class"
+                       placeholder="Table name in the RDBMS and related GDBMS node class">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="file-upload" style="margin-bottom: 5px">Upload Data : ZIP(shp) or TIF:</label>
+            <input type="file" id="file-upload" accept=".zip,.tif" style="display: none;">
+            <button id="custom-file-upload-btn">Open</button>
+            <span id="file-chosen">No file chosen</span>
+        </div>
+
+        <div style="font-size: 0.9rem; color: #555;">
+            <div>Spatiotemporal Index:</div>
+            <div class="checkbox-group" style="height: 15px">
+                <div>
+                    <input type="checkbox" id="geohash-index" value="1" checked disabled>
+                    <div>Geohash</div>
+                </div>
+                <div>
+                    <input type="checkbox" id="temporal-tree-index" value="1" onchange="toggleTimeColumnSelect()">
+                    <div>Time-tree</div>
+                </div>
+                <div id="time-column-select-group" class="hidden"
+                     style="font-size: 0.9rem; color: #555; height: 60px; margin-left: 0">
+                    <label for="time-column-select">Time-column:</label>
+                    <select id="time-column-select">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group button-group">
+            <button class="main-btn" id="insert-bridge-btn">Insert & Bridge</button>
+            <div id="insert-result" class="result"></div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    async function NeoConnection(dbType) {
+        let addressInput = document.getElementById(dbType + '-address').value;
+        let usernameInput = document.getElementById(dbType + '-username').value;
+        let passwordInput = document.getElementById(dbType + '-password').value;
+        let resultDiv = document.getElementById(dbType + '-result');
+        let databaseSelect = document.getElementById(dbType + '-database');
+
+        databaseSelect.innerHTML = '';
+        resultDiv.style.display = 'none';
+
+        if (addressInput && usernameInput && passwordInput) {
+            const params = {
+                url: addressInput,
+                username: usernameInput,
+                password: passwordInput
+            };
+
+            try {
+                let response = await fetch('/connectNEO/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                let result = await response.json();
+
+                if (response.ok) {
+                    result.databases.forEach(function (database) {
+                        let option = document.createElement('option');
+                        option.value = database;
+                        option.text = database;
+                        databaseSelect.appendChild(option);
+                    });
+
+                    resultDiv.innerHTML = result.message;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = 'Error: ' + result.detail;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Error: Unable to connect to ' + dbType.toUpperCase() + ' - ' + error.message;
+                resultDiv.className = 'result error';
+            }
+        } else {
+            resultDiv.innerHTML = 'Error: Please provide all the required fields.';
+            resultDiv.className = 'result error';
+        }
+
+        resultDiv.style.display = 'inline-block';
+    }
+
+
+    async function PgConnection(dbType) {
+        let addressInput = document.getElementById(dbType + '-address').value;
+        let usernameInput = document.getElementById(dbType + '-username').value;
+        let passwordInput = document.getElementById(dbType + '-password').value;
+        let resultDiv = document.getElementById(dbType + '-result');
+        let databaseSelect = document.getElementById(dbType + '-database');
+
+        databaseSelect.innerHTML = '';
+        resultDiv.style.display = 'none';
+
+        if (addressInput && usernameInput && passwordInput) {
+            const params = {
+                url: addressInput,
+                username: usernameInput,
+                password: passwordInput
+            };
+
+            try {
+                let response = await fetch('/connectPG/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                let result = await response.json();
+
+                if (response.ok) {
+                    result.databases.forEach(function (database) {
+                        let option = document.createElement('option');
+                        option.value = database;
+                        option.text = database;
+                        databaseSelect.appendChild(option);
+                    });
+
+                    resultDiv.innerHTML = result.message;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = 'Error: ' + result.detail;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Error: Unable to connect to ' + dbType.toUpperCase() + ' - ' + error.message;
+                resultDiv.className = 'result error';
+            }
+        } else {
+            resultDiv.innerHTML = 'Error: Please provide all the required fields.';
+            resultDiv.className = 'result error';
+        }
+        resultDiv.style.display = 'inline-block';
+    }
+
+
+    let uploadedFile; // Variable to store the uploaded file data
+
+    document.getElementById('insert-bridge-btn').addEventListener('click', function () {
+        // Collect form data
+        const data = {
+            neo4jAddress: document.getElementById('neo4j-address').value,
+            neo4jUsername: document.getElementById('neo4j-username').value,
+            neo4jPassword: document.getElementById('neo4j-password').value,
+            neo4jDatabase: document.getElementById('neo4j-database').value,
+            postgisAddress: document.getElementById('postgis-address').value,
+            postgisUsername: document.getElementById('postgis-username').value,
+            postgisPassword: document.getElementById('postgis-password').value,
+            postgisDatabase: document.getElementById('postgis-database').value,
+            entityType: document.getElementById('entity-type').value,
+            entityClass: document.getElementById('entity-class').value,
+            timeColumn: document.getElementById('time-column-select').value,
+            isTemporalTreeIndex: document.getElementById('temporal-tree-index').checked,
+            isGeohashIndex: document.getElementById('geohash-index').checked,
+            fileData: uploadedFile ? uploadedFile : 'No file chosen'
+        };
+
+        for (let key in data) {
+            if (data[key] === "" && key !== 'timeColumn') {
+                alert('Please fill in all required fields.');
+                return;
+            }
+        }
+
+        if (data.isTemporalTreeIndex && data.timeColumn === "" && data.entityType !== 'Raster') {
+            alert('Please select a time column.');
+            return;
+        }
+        const timeColumnSelect = document.getElementById('temporal-tree-index').checked;
+        const formData = new FormData();
+        formData.append('postgisAddress', data.postgisAddress);
+        formData.append('postgisUsername', data.postgisUsername);
+        formData.append('postgisPassword', data.postgisPassword);
+        formData.append('postgisDatabase', data.postgisDatabase);
+        formData.append('neo4jAddress', data.neo4jAddress);
+        formData.append('neo4jUsername', data.neo4jUsername);
+        formData.append('neo4jPassword', data.neo4jPassword);
+        formData.append('neo4jDatabase', data.neo4jDatabase);
+        formData.append('idColumn', data.idColumn);
+        if (timeColumnSelect) {
+            formData.append('timeColumn', data.timeColumn);
+        } else formData.append('timeColumn', '');
+        formData.append('entityType', data.entityType);
+        formData.append('entityClass', data.entityClass);
+        formData.append('file', data.fileData);
+
+
+
+
+        // 检查文件类型
+        const fileExtension = data.fileData.name.slice(((data.fileData.name.lastIndexOf(".") - 1) >>> 0) + 2);
+
+        if (fileExtension === 'zip') {
+            fetch('/import-shp/', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Success:', result);
+                    alert('Shapefile uploaded successfully.');
+                    document.getElementById('loading-spinner').classList.add('hidden');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error uploading Shapefile.');
+                    document.getElementById('loading-spinner').classList.add('hidden');
+                });
+        } else if (fileExtension === 'tif') {
+            fetch('/import-tif/', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Success:', result);
+                    alert('Tif uploaded successfully.');
+                    document.getElementById('loading-spinner').classList.add('hidden');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error uploading Tif.');
+                    document.getElementById('loading-spinner').classList.add('hidden');
+                });
+            document.getElementById('loading-spinner').classList.add('hidden');
+        }
+
+        // 显示加载动画
+        document.getElementById('loading-spinner').classList.remove('hidden');
+
+
+    });
+
+
+    document.getElementById('custom-file-upload-btn').addEventListener('click', function () {
+        document.getElementById('file-upload').click();
+    });
+
+    document.getElementById('file-upload').addEventListener('change', function () {
+        const fileInput = document.getElementById('file-upload');
+        const fileChosenSpan = document.getElementById('file-chosen');
+        const timeColumnSelect = document.getElementById('time-column-select');
+
+        if (fileInput.files.length > 0) {
+            uploadedFile = fileInput.files[0];
+            const GEOFile = fileInput.files[0];
+            fileChosenSpan.textContent = GEOFile.name;
+            const fileExtension = GEOFile.name.slice(((GEOFile.name.lastIndexOf(".") - 1) >>> 0) + 2);
+            if (fileExtension == 'zip') {
+                JSZip.loadAsync(GEOFile)
+                    .then(function (zip) {
+                        const dbfFile = zip.file(/\.dbf$/i)[0];
+                        if (!dbfFile) {
+                            alert('ZIP 文件必须包含 .dbf 文件。');
+                            return;
+                        }
+                        dbfFile.async("arraybuffer")
+                            .then(function (dbfBuffer) {
+                                shapefile.openDbf(dbfBuffer)
+                                    .then(source => source.read()
+                                        .then(result => {
+                                            if (result.done) return;
+                                            const fields = Object.keys(result.value);
+                                            timeColumnSelect.innerHTML = '';
+                                            fields.forEach(field => {
+                                                timeColumnSelect.appendChild(new Option(field, field));
+                                            });
+                                        }))
+                                    .catch(error => {
+                                        console.error('读取 DBF 文件时出错:', error);
+                                        alert('读取 DBF 文件时出错: ' + error.message);
+                                    });
+                            })
+                            .catch(error => {
+                                console.error('读取 ZIP 文件中的 DBF 文件时出错:', error);
+                                alert('读取 ZIP 文件中的 DBF 文件时出错: ' + error.message);
+                            });
+                    })
+                    .catch(function (err) {
+                        console.error("读取 ZIP 文件时出错:", err);
+                        alert('读取 ZIP 文件时出错: ' + err.message);
+                    });
+            } else if (fileExtension == 'tif') {
+                document.getElementById('entity-type').value = 'Raster';
+            } else {
+                alert('格式错误，矢量数据请压缩为zip上传；栅格数据请直接上传tif')
+                fileChosenSpan.textContent = 'No file chosen';
+                fileInput.value = '';
+            }
+
+        } else {
+            fileChosenSpan.textContent = 'No file chosen';
+        }
+        fileInput.value = '';
+    });
+
+    function toggleTimeColumnSelect() {
+        const timeTreeCheckbox = document.getElementById('temporal-tree-index');
+        const timeColumnSelectGroup = document.getElementById('time-column-select-group');
+
+        if (timeTreeCheckbox.checked) {
+            timeColumnSelectGroup.classList.remove('hidden');
+            timeColumnSelectGroup.classList.add('visible');
+        } else {
+            timeColumnSelectGroup.classList.remove('visible');
+            timeColumnSelectGroup.classList.add('hidden');
+        }
+    }
+</script>
+</body>
+</html>
