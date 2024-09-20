@@ -1,9 +1,7 @@
 
 # GraST: Geospatial-Temporal Semantic Query Optimization Framework
 
-<p align="center">
-  <img src="FIG/GraST_logo.png" alt="GraST Logo" width="200"/>
-</p>
+
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Neo4j Version](https://img.shields.io/badge/Neo4j-5.x-green.svg)](https://neo4j.com/download-center/)
@@ -24,11 +22,9 @@ GraST currently supports Neo4j 5.x and PostgreSQL 16 (with PostGIS extension). P
 - 🔌 Easy integration with existing systems
 
 ## Project Directory
-
-Currently, a schematic version of GraST is provided for self-expansion.
-
-- `Data-Importer`: Import geographic entities synchronously into graph and relational databases and build indexes, based on FastAPI
 - `GraST-Java`: GraST's core component, built on Maven, including geographic entity mapping across data, and conversion of Cypher queries to SQL queries
+- `Data-Importer`: Import geographic entities synchronously into graph and relational databases and build indexes, based on FastAPI
+
 
 ## Supported Geographic Calculation Functions
 
@@ -94,24 +90,23 @@ pip install .\GDAL-3.8.2-cp310-cp310-win_amd64.whl
 
 Please note:
 - For vector data, compress the `.shp`, `.dbf`, and other files into a ZIP file and upload it using the Data Importer. Three sample files are provided in the `Datasets` directory: `borough.zip`, `check-ins.zip`, and `NY_POIs.zip`.
-  <img src="FIG/img_1.png" width="300">
+  <img src="FIG/img.png" width="300">
 
 - For raster data, simply upload the `.tif` file.
-  <img src="FIG/img_2.png" width="300">
+  <img src="FIG/img.png" width="300">
 
 ## Geospatial Data Graph Organization Example
 
 - The Geohash index of the geographic node:
+  <img src="FIG/img_2.png" width="400">
+
+- The MTT index of the geographic node: Querying geographic nodes based on multi-granularity time trees:
   <img src="FIG/img_3.png" width="400">
-
-- Querying geographic nodes based on multi-granularity time trees:
-
 ```cypher
 MATCH (y:Year {value: 2012})<-[:isYearOf]-(m:Month {value: 4})<-[:isMonthOf]-(d:Day {value: 16})<-[:isDayOf]-(h:Hour)<-[:isHourOf]-(c:checkins)
 RETURN y, m, d, h, c
 ```
 
-<img src="FIG/img_4.png" width="400">
 
 ## GraST Development
 
