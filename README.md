@@ -39,3 +39,15 @@ We welcome contributions to GraST! If you'd like to contribute, please follow th
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+SHP格式数据清压缩为ZIP格式，TIF格式直接上传
+
+<img src="FIG/img.png" width="300">
+
+
+<img src="FIG/img_2.png" width="400">
+
+MATCH (y:Year {value: 2012})<-[:isYearOf]-(m:Month {value: 4})<-[:isMonthOf]-(d:Day {value: 16})<-[:isDayOf]-(h:Hour)<-[:isHourOf]-(c:checkins)
+RETURN y, m, d, h, c
+
+<img src="FIG/img_3.png" width="400">
