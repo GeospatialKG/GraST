@@ -117,8 +117,10 @@ async def upload_shp(
         neo4jPassword: str = Form(...),
         neo4jDatabase: str = Form(...),
         timeColumn: str = Form(None),
+        timeColumnSelect: str = Form(None),
         entityType: str = Form(...),
         entityClass: str = Form(...)) -> Dict:
+
     DATABASE_URL = f'postgresql://{postgisUsername}:{postgisPassword}@{postgisAddress}/{postgisDatabase}'
     engine = create_engine(DATABASE_URL)
     neo4j_conn = None
@@ -154,9 +156,10 @@ async def upload_shp(
                 'geom': Geometry(geomtype, srid=4326),
                 'geohash': ARRAY(TEXT)
             }
-            if timeColumn and timeColumn in gdf.columns:
+
+            if timeColumnSelect == 'true' and timeColumn in gdf.columns:
                 gdf.rename(columns={timeColumn: 'time'}, inplace=True)
-            if 'time' in gdf.columns:
+            if timeColumnSelect == 'true' and 'time' in gdf.columns:
                 columns_to_write.append('time')
                 dtype['time'] = TIMESTAMP(timezone=False)
                 gdf['time'] = pd.to_datetime(gdf['time'], unit='s', utc=True)
@@ -167,7 +170,7 @@ async def upload_shp(
             gdf_neo['EntityID'] = gdf_neo.index
             data_to_insert = gdf_neo.drop(columns=['geom']).to_dict(orient='records')
             neo4j_conn = Neo4jConnection("bolt://" + neo4jAddress, neo4jUsername, neo4jPassword)
-            if timeColumn:
+            if timeColumnSelect == 'true':
                 neo4j_conn.write_data(data_to_insert, neo4jDatabase, entityClass, True)
             else:
                 neo4j_conn.write_data(data_to_insert, neo4jDatabase, entityClass, False)

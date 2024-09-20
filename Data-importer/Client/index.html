@@ -253,7 +253,7 @@
 </div>
 
 <div class="container">
-    <h1>GraST ETL Adaptor</h1>
+    <h1>Geospaital Data Importer</h1>
 
     <div class="section" style="margin-top: 16px">
         <h2>Database Connection</h2>
@@ -325,9 +325,9 @@
                 </select>
             </div>
             <div class="form-group" style="flex: 2;">
-                <label for="entity-class">Entity Class (Table Name / Node Class):</label>
+                <label for="entity-class">Entity Class (Table Name / Node Label):</label>
                 <input type="text" id="entity-class"
-                       placeholder="Table name in the RDBMS and related GDBMS node class">
+                       placeholder="Table name in the RDBMS and related GDBMS node label">
             </div>
         </div>
 
@@ -509,7 +509,6 @@
             alert('Please select a time column.');
             return;
         }
-        const timeColumnSelect = document.getElementById('temporal-tree-index').checked;
         const formData = new FormData();
         formData.append('postgisAddress', data.postgisAddress);
         formData.append('postgisUsername', data.postgisUsername);
@@ -520,13 +519,11 @@
         formData.append('neo4jPassword', data.neo4jPassword);
         formData.append('neo4jDatabase', data.neo4jDatabase);
         formData.append('idColumn', data.idColumn);
-        if (timeColumnSelect) {
-            formData.append('timeColumn', data.timeColumn);
-        } else formData.append('timeColumn', '');
+        formData.append('timeColumn', data.timeColumn);
+        formData.append('timeColumnSelect', document.getElementById('temporal-tree-index').checked)
         formData.append('entityType', data.entityType);
         formData.append('entityClass', data.entityClass);
         formData.append('file', data.fileData);
-
 
 
 

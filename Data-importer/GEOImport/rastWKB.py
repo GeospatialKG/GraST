@@ -32,7 +32,6 @@
 #
 from __future__ import print_function
 from osgeo import gdal
-from osgeo import osr
 import osgeo.gdalconst as gdalc
 from optparse import OptionParser, OptionGroup
 import binascii

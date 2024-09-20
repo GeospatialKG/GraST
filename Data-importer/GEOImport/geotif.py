@@ -105,7 +105,7 @@ def rastGeoHash(postgisAddress, postgisUsername, postgisPassword, postgisDatabas
 
             geo_data = [{"rid": rid,"geohash": gh}]
 
-            neo4j_conn.write_data(geo_data, neo4jDatabase, entityClass)
+            neo4j_conn.write_data(geo_data, neo4jDatabase, entityClass, False)
 
             print(f"Inserted GeoHash {gh} into database.")
     finally:
