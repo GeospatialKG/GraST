@@ -46,27 +46,20 @@ GraST currently supports the following geographic calculation functions:
 - `GraST.area(IDA)`
 - `GraST.distance(IDA, IDB)`
 
-## Adding GraST Library Extension to Neo4j
+## Add GraST Library Extension to Neo4j
 
-1. Copy `GraST.jar` and `database.properties` from the `release` folder.
+1. Copy `GraST.jar` and `database.properties` from [Link](https://github.com/GeospatialKG/GraST/releases)
 2. Paste them into the `\plugins` folder of your Neo4j installation.
 3. Define the PostGIS connection information in `database.properties`:
-
-```
-# database.properties
-database.url=jdbc:postgresql://localhost:5432/Test
-database.user=postgres 
-database.password=123456
-```
-
 4. Open `neo4j.conf` and set the permissions for `dbms.security.procedures` (official way to enable plugin permissions):
-   
 ```
 dbms.security.procedures.unrestricted=....,GraST.*
 dbms.security.procedures.allowlist=....,GraST.*
 ```
+5. Using `GraST Data Importer` and import the geographic data before querying. See the next section for steps.
 
 ## Geospatial Data Importer Installation
+The data importer is located in the /Data-Importer folder of the project source code and is built based on Python.
 
 To install the required dependencies, run the following command:
 
@@ -74,7 +67,7 @@ To install the required dependencies, run the following command:
 pip install fastapi uvicorn staticfiles pygeohash geopandas pandas neo4j sqlalchemy geoalchemy2 psycopg2 gdal==3.8.4 numpy==1.26.4
 ```
 
-Please note that we recommend using the specified versions for GDAL (3.8.4) and numpy (1.26.4) to ensure compatibility.
+Please note that we recommend using the specified versions for GDAL (3.8.4) to ensure compatibility.
 
 If the installation of GDAL fails, you can manually download the appropriate wheel file from https://github.com/cgohlke/geospatial-wheels/releases and install it offline. For example:
 
