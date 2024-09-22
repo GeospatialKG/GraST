@@ -28,23 +28,45 @@ GraST currently supports Neo4j 5.x and PostgreSQL 16 (with PostGIS extension). P
 
 ## Supported Geographic Calculation Functions
 
-GraST currently supports the following geographic calculation functions:
+GraST (Graph Storage) currently supports the following geographic calculation functions for analyzing spatial relationships and performing geographic computations:
 
-- `GraST.within(IDA, IDB)`
-- `GraST.contains(IDA, IDB)`
-- `GraST.intersects(IDA, IDB)`
-- `GraST.touches(IDA, IDB)`
-- `GraST.overlaps(IDA, IDB)`
-- `GraST.equals(IDA, IDB)`
-- `GraST.disjoint(IDA, IDB)`
-- `GraST.covers(IDA, IDB)` 
-- `GraST.crosses(IDA, IDB)`
-- `GraST.knn(IDA, IDB, num)`
-- `GraST.withinDistance(IDA, IDB, distance)`
-- `GraST.withinGeom(IDA, geom:wkt)`
-- `GraST.buffer(IDA, distance)`
-- `GraST.area(IDA)`
-- `GraST.distance(IDA, IDB)`
+- `GraST.within(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are completely inside the geometries of entities from B.
+
+- `GraST.contains(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A completely contain the geometries of entities from B.
+
+- `GraST.coveredby(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are covered by the geometries of entities from B.
+
+- `GraST.covers(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A cover the geometries of entities from B.
+
+- `GraST.crosses(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A cross the geometries of entities from B.
+
+- `GraST.disjoint(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are disjoint from the geometries of entities from B.
+
+- `GraST.equals(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are spatially equal to the geometries of entities from B.
+
+- `GraST.intersects(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A intersect the geometries of entities from B.
+
+- `GraST.knn(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B, num)`: Returns the IDs of entities from B that are the k-nearest neighbors to the geometries of entities from A. `num` specifies the number of neighbors to return.
+
+- `GraST.length(EntityLabel_A, IDs_A)`: Returns the IDs of entities from A along with the calculated length of their geometries. 
+
+- `GraST.overlaps(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A overlap the geometries of entities from B.
+
+- `GraST.touches(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A touch the geometries of entities from B.
+
+- `GraST.value(EntityLabel_A, IDs_A, RasterLabel)`: Returns the IDs of entities from A along with the extracted raster values from the specified raster layer `RasterLabel` at the locations of the geometries.
+
+- `GraST.withinDistance(EntityLabel_A, IDs_A, distance, EntityLabel_B, IDs_B)`: Returns the IDs of entities from B that are within the specified `distance` from the geometries of entities from A.
+
+Parameters
+
+- `EntityLabel_A`, `EntityLabel_B`: Strings representing the labels for the geographic entities.
+- `IDs_A`, `IDs_B`: Arrays of IDs for the geographic entities. Support passing a single ID or multiple IDs. If an empty array is passed, the operation will be performed on the entire table.
+- `RasterLabel`: String representing the label for the raster layer.
+- `num`, `distance`: Numeric parameters for the `knn` and `withinDistance` functions, respectively.
+
+See the Query Examples section at the end of the README for specific usage steps and sample queries using GraST functions.
+
 
 ## Add GraST Library Extension to Neo4j
 
@@ -114,6 +136,8 @@ Datasets:
 - NYC Borough Boundaries: [Link](https://data.cityofnewyork.us/)
 - FourSquare - NYC Check-ins: [Link](https://www.kaggle.com/datasets/chetanism/foursquare-nyc-and-tokyo-checkin-dataset)
 - New York POI Data
+
+CALL GraST.area('NY_Borough',[])
 
 Next, we will demonstrate geospatial-temporal queries in Neo4j based on these datasets.
 
