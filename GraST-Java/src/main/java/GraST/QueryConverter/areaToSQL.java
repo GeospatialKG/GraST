@@ -1,5 +1,4 @@
 package GraST.QueryConverter;
-
 import org.neo4j.procedure.Procedure;
 import org.neo4j.procedure.Description;
 import org.neo4j.procedure.Name;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 public class areaToSQL {
 
@@ -39,8 +39,7 @@ public class areaToSQL {
 
     private String buildAreaQuery(String table, List<Long> ids) {
         StringBuilder sql = new StringBuilder();
-//        sql.append("SELECT id, ST_Area(geom) AS area FROM ").append(table);
-        sql.append("SELECT id, ST_Area(geom::geography) AS area FROM ").append(table);
+        sql.append("SELECT id, ST_Area(geom::geography) AS area FROM ").append(quoteIdentifier(table));
         if (!ids.isEmpty()) {
             sql.append(" WHERE id IN (").append(ids.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(")");
         }

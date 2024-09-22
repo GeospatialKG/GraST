@@ -58,9 +58,6 @@ public class withinDistanceToSQL {
         return sql.toString();
     }
 
-    private String quoteIdentifier(String identifier) {
-        return "\"" + identifier.replace("\"", "\"\"") + "\""; // Properly escape quotes by doubling them
-    }
 
     public static class DistanceOutputRecord {
         public long id1; // ID from table1
