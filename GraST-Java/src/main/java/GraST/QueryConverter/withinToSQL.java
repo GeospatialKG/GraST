@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 /**
  * This class facilitates the spatial analysis by determining whether the geometries in one table are contained within those of another table in a relational database system (RDBMS).
@@ -40,22 +41,22 @@ public class withinToSQL {
                 DatabaseProperties.getDbUrl(),
                 DatabaseProperties.getUser(),
                 DatabaseProperties.getPassword())) {
-            StringBuilder sql = new StringBuilder("SELECT a.id as aid, b.id as bid, ST_Within(a.geom, b.geom) AS isRelated ");
-            sql.append("FROM ").append("\"").append(table1).append("\"").append(" a, ").append(table2).append(" b ");
+            StringBuilder sql = new StringBuilder("SELECT a.id as aid, b.id as bid ");
+            sql.append("FROM ").append(quoteIdentifier(table1)).append(" a, ").append(quoteIdentifier(table2)).append(" b ");
+            sql.append("WHERE ST_Within(a.geom, b.geom) ");
 
             if (ids1 != null && !ids1.isEmpty()) {
-                sql.append("WHERE a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
+                sql.append("AND a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
             }
             if (ids2 != null && !ids2.isEmpty()) {
-                sql.append(ids1 != null && !ids1.isEmpty() ? "AND " : "WHERE ");
-                sql.append("b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
+                sql.append("AND b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
             }
 
             PreparedStatement stmt = conn.prepareStatement(sql.toString());
             ResultSet rs = stmt.executeQuery();
             Stream.Builder<OutputRecord> results = Stream.builder();
             while (rs.next()) {
-                results.add(new OutputRecord(rs.getLong("aid"), rs.getLong("bid"), rs.getBoolean("isRelated")));
+                results.add(new OutputRecord(rs.getLong("aid"), rs.getLong("bid")));
             }
             return results.build();
         } catch (Exception e) {
@@ -63,23 +64,21 @@ public class withinToSQL {
         }
     }
 
+
     /**
      * OutputRecord encapsulates the result of the spatial query.
      * Each record represents a relationship check between a pair of geometries from the two specified tables.
      *
      * @param id1 The ID of the geometry from table1 involved in the check.
      * @param id2 The ID of the geometry from table2 involved in the check.
-     * @param isRelated True if the geometry from table1 is within the geometry from table2, otherwise false.
      */
     public static class OutputRecord {
         public long id1;
         public long id2;
-        public boolean isRelated;
 
-        public OutputRecord(long id1, long id2, boolean isRelated) {
+        public OutputRecord(long id1, long id2) {
             this.id1 = id1;
             this.id2 = id2;
-            this.isRelated = isRelated;
         }
     }
 }

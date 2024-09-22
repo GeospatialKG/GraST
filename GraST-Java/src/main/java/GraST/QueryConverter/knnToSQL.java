@@ -1,5 +1,4 @@
 package GraST.QueryConverter;
-
 import org.neo4j.procedure.Procedure;
 import org.neo4j.procedure.Description;
 import org.neo4j.procedure.Name;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 public class knnToSQL {
 
@@ -56,10 +56,6 @@ public class knnToSQL {
         sql.append("ORDER BY a.geom <-> b.geom LIMIT ").append(k);
 
         return sql.toString();
-    }
-
-    private String quoteIdentifier(String identifier) {
-        return "\"" + identifier.replace("\"", "\"\"") + "\""; // Properly escape quotes by doubling them
     }
 
     public static class KnnOutputRecord {

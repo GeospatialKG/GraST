@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 public class distanceToSQL {
 
@@ -53,7 +54,7 @@ public class distanceToSQL {
             sql.append("SELECT ")
                     .append(id1).append(" AS id1, ").append(id2).append(" AS id2, ")
                     .append("ST_Distance(ST_Transform(a.geom, 4326)::geography, ST_Transform(b.geom, 4326)::geography) AS distance ")
-                    .append("FROM \"").append(table).append("\" a, \"").append(table).append("\" b ")  // 双引号引用表名
+                    .append("FROM ").append(quoteIdentifier(table)).append(" a, ").append(quoteIdentifier(table)).append(" b ")
                     .append("WHERE a.id = ").append(id1).append(" AND b.id = ").append(id2);
         }
 

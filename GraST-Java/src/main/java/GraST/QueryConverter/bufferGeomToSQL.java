@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 public class bufferGeomToSQL {
 
@@ -48,7 +49,7 @@ public class bufferGeomToSQL {
         sql.append("SELECT ST_AsText(ST_Union(ST_Transform(ST_Buffer(ST_Transform(geom, 3857), ");
         sql.append(distance);
         sql.append("), 4326))) AS geom_union ");
-        sql.append("FROM \"").append(table).append("\" ");
+        sql.append("FROM ").append(quoteIdentifier(table));
         sql.append("WHERE id IN (");
         for (int i = 0; i < ids.size(); i++) {
             sql.append(ids.get(i));

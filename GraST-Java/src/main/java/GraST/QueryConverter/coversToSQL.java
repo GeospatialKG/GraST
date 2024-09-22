@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 public class coversToSQL {
 
@@ -27,7 +28,7 @@ public class coversToSQL {
                 DatabaseProperties.getUser(),
                 DatabaseProperties.getPassword())) {
             StringBuilder sql = new StringBuilder("SELECT a.id as aid, b.id as bid, ST_Covers(a.geom, b.geom) AS isRelated ");
-            sql.append("FROM ").append("\"").append(table1).append("\"").append(" a, ").append(table2).append(" b ");
+            sql.append("FROM ").append(quoteIdentifier(table1)).append(" a, ").append(quoteIdentifier(table1)).append(" b ");
 
             if (ids1 != null && !ids1.isEmpty()) {
                 sql.append("WHERE a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");

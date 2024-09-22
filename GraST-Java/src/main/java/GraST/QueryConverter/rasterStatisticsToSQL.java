@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 public class rasterStatisticsToSQL {
 
@@ -42,7 +43,7 @@ public class rasterStatisticsToSQL {
     }
 
     private String buildStatsQuery(String rasterTable, String wktGeom) {  // Modified method to include WKT geometry
-        return "SELECT (ST_SummaryStatsAgg(ST_Clip(r.rast, ST_GeomFromText('" + wktGeom + "', 4326), true), 1, true)).* FROM " + rasterTable + " r " +
+        return "SELECT (ST_SummaryStatsAgg(ST_Clip(r.rast, ST_GeomFromText('" + wktGeom + "', 4326), true), 1, true)).* FROM " + quoteIdentifier(rasterTable) + " r " +
                 "WHERE ST_Intersects(r.rast, ST_GeomFromText('" + wktGeom + "', 4326))";
     }
 

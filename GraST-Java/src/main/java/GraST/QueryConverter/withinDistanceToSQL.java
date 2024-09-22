@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 public class withinDistanceToSQL {
 
@@ -44,8 +45,7 @@ public class withinDistanceToSQL {
     private String buildWithinDistanceQuery(String table1, List<Long> ids1, double distance, String table2, List<Long> ids2) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT a.id AS id1, b.id AS id2 ")
-                .append("FROM ").append("\"").append(table1).append("\"").append(" a, ")
-                .append("\"").append(table2).append("\"").append(" b ") // 确保两个表名都有双引号
+                .append("FROM ").append(quoteIdentifier(table1)).append(" a, ").append(quoteIdentifier(table2)).append(" b ")
                 .append("WHERE ST_DistanceSphere(ST_SetSRID(a.geom, 4326), ST_SetSRID(b.geom, 4326)) <= ? ");  // 使用 ? 作为参数占位符
         if (!ids1.isEmpty()) {
             sql.append("AND a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
@@ -60,8 +60,8 @@ public class withinDistanceToSQL {
 
 
     public static class DistanceOutputRecord {
-        public long id1; // ID from table1
-        public long id2; // ID from table2
+        public long id1;
+        public long id2;
 
         public DistanceOutputRecord(long id1, long id2) {
             this.id1 = id1;

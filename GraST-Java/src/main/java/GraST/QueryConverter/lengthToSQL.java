@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 /**
  * This class provides a Neo4j stored procedure to calculate the length of geometries from a table in an RDBMS.
@@ -49,8 +50,7 @@ public class lengthToSQL {
 
     private String buildLengthQuery(String table, List<Long> ids) {
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT id, ST_LengthSpheroid(geom, 'SPHEROID[\"WGS 84\",6378137,298.257223563]') AS length FROM ").append(table);
-//        sql.append("SELECT id, ST_Length(geom) AS length FROM ").append(table);
+        StringBuilder append = sql.append("SELECT id, ST_LengthSpheroid(geom, 'SPHEROID[\"WGS 84\",6378137,298.257223563]') AS length FROM ").append(quoteIdentifier(table));
         if (ids != null && !ids.isEmpty()) {
             sql.append(" WHERE id IN (").append(ids.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(")");
         }

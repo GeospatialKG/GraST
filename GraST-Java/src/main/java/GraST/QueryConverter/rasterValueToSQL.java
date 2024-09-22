@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import GraST.EntityMapper.DatabaseProperties;
+import static GraST.QueryConverter.IdentifierQuoter.quoteIdentifier;
 
 /**
  * This class provides a Neo4j stored procedure to get the raster pixel values at specific points or all points from a raster table in an RDBMS.
@@ -61,8 +62,8 @@ public class rasterValueToSQL {
         } else {
             // 查询所有点，确保每个点的 id 和 geom 都被选择
             sql.append("SELECT p.id, ST_Value(r.rast, p.geom) AS pixel_value ")
-                    .append("FROM ").append("\"").append(pointTable).append("\"").append(" p ")
-                    .append("JOIN ").append(rasterTable).append(" r ON ST_Intersects(r.rast, p.geom)");
+                    .append("FROM ").append(quoteIdentifier(pointTable)).append(" p ")
+                    .append("JOIN ").append(quoteIdentifier(rasterTable)).append(" r ON ST_Intersects(r.rast, p.geom)");
         }
         return sql.toString();
     }
