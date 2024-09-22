@@ -137,7 +137,11 @@ Datasets:
 - FourSquare - NYC Check-ins: [Link](https://www.kaggle.com/datasets/chetanism/foursquare-nyc-and-tokyo-checkin-dataset)
 - New York POI Data
 
+```
 CALL GraST.area('NY_Borough',[])
+```
+![img.png](img.png)
+
 
 Next, we will demonstrate geospatial-temporal queries in Neo4j based on these datasets.
 
