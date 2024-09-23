@@ -42,7 +42,7 @@ public class rasterValueToSQL {
             ResultSet rs = stmt.executeQuery();
             Stream.Builder<ValueOutputRecord> results = Stream.builder();
             while (rs.next()) {
-                results.add(new ValueOutputRecord(rs.getLong("id"), rs.getDouble("pixel_value")));
+                results.add(new ValueOutputRecord(rs.getLong("id"), rs.getDouble("raster_value")));
             }
             return results.build();
         } catch (Exception e) {
@@ -54,14 +54,14 @@ public class rasterValueToSQL {
         StringBuilder sql = new StringBuilder();
         if (pointIds != null && !pointIds.isEmpty()) {
             // 当查询特定的点时，从点表中获取 geom 和 id
-            sql.append("SELECT p.id, ST_Value(r.rast, p.geom) AS pixel_value ")
+            sql.append("SELECT p.id, ST_Value(r.rast, p.geom) AS raster_value ")
                     .append("FROM ").append(rasterTable).append(" r, ")
                     .append("(SELECT id, geom FROM ").append("\"").append(pointTable).append("\"").append(" WHERE id = ")
                     .append(pointIds.get(0)).append(") AS p ")
                     .append("WHERE ST_Intersects(r.rast, p.geom)");
         } else {
             // 查询所有点，确保每个点的 id 和 geom 都被选择
-            sql.append("SELECT p.id, ST_Value(r.rast, p.geom) AS pixel_value ")
+            sql.append("SELECT p.id, ST_Value(r.rast, p.geom) AS raster_value ")
                     .append("FROM ").append(quoteIdentifier(pointTable)).append(" p ")
                     .append("JOIN ").append(quoteIdentifier(rasterTable)).append(" r ON ST_Intersects(r.rast, p.geom)");
         }
@@ -75,11 +75,11 @@ public class rasterValueToSQL {
      */
     public static class ValueOutputRecord {
         public long id;
-        public double pixel_value;
+        public double raster_value;
 
-        public ValueOutputRecord(long id, double pixel_value) {
+        public ValueOutputRecord(long id, double raster_value) {
             this.id = id;
-            this.pixel_value = pixel_value;
+            this.raster_value = raster_value;
         }
     }
 }

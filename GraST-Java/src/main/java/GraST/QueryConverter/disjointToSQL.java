@@ -27,7 +27,7 @@ public class disjointToSQL {
      * @param ids1 A list of identifiers from table1 to narrow down the query for efficiency reasons. If empty, all geometries are checked.
      * @param table2 The name of the second table containing reference geometries to check against.
      * @param ids2 A list of identifiers from table2 to narrow down the query. If empty, all geometries in table2 are used as reference.
-     * @return A stream of OutputRecord, each indicating a pair of IDs from both tables and whether the geometry from table1 is disjoint from that of table2.
+     * @return A stream of OutputRecord, each indicating a pair of IDs from both tables where the geometry from table1 is disjoint from that of table2.
      */
     @Procedure(value = "GraST.disjoint", mode = org.neo4j.procedure.Mode.READ)
     @Description("Checks if geometries from 'table1' are disjoint from those from 'table2' in an RDBMS.")
@@ -41,22 +41,22 @@ public class disjointToSQL {
                 DatabaseProperties.getDbUrl(),
                 DatabaseProperties.getUser(),
                 DatabaseProperties.getPassword())) {
-            StringBuilder sql = new StringBuilder("SELECT a.id as aid, b.id as bid, ST_Disjoint(a.geom, b.geom) AS isRelated ");
+            StringBuilder sql = new StringBuilder("SELECT a.id as aid, b.id as bid ");
             sql.append("FROM ").append(quoteIdentifier(table1)).append(" a, ").append(quoteIdentifier(table2)).append(" b ");
+            sql.append("WHERE ST_Disjoint(a.geom, b.geom) ");
 
             if (ids1 != null && !ids1.isEmpty()) {
-                sql.append("WHERE a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
+                sql.append("AND a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
             }
             if (ids2 != null && !ids2.isEmpty()) {
-                sql.append(ids1 != null && !ids1.isEmpty() ? "AND " : "WHERE ");
-                sql.append("b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
+                sql.append("AND b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
             }
 
             PreparedStatement stmt = conn.prepareStatement(sql.toString());
             ResultSet rs = stmt.executeQuery();
             Stream.Builder<OutputRecord> results = Stream.builder();
             while (rs.next()) {
-                results.add(new OutputRecord(rs.getLong("aid"), rs.getLong("bid"), rs.getBoolean("isRelated")));
+                results.add(new OutputRecord(rs.getLong("aid"), rs.getLong("bid")));
             }
             return results.build();
         } catch (Exception e) {
@@ -66,21 +66,18 @@ public class disjointToSQL {
 
     /**
      * OutputRecord encapsulates the result of the spatial query.
-     * Each record represents a relationship check between a pair of geometries from the two specified tables.
+     * Each record represents a pair of geometries from the two specified tables that are disjoint.
      *
-     * @param id1 The ID of the geometry from table1 involved in the check.
-     * @param id2 The ID of the geometry from table2 involved in the check.
-     * @param isRelated True if the geometry from table1 is disjoint from the geometry from table2, otherwise false.
+     * @param id1 The ID of the geometry from table1.
+     * @param id2 The ID of the geometry from table2.
      */
     public static class OutputRecord {
         public long id1;
         public long id2;
-        public boolean isRelated;
 
-        public OutputRecord(long id1, long id2, boolean isRelated) {
+        public OutputRecord(long id1, long id2) {
             this.id1 = id1;
             this.id2 = id2;
-            this.isRelated = isRelated;
         }
     }
 }

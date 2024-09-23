@@ -67,7 +67,7 @@ public class distanceToSQL {
         public double totalDistance;
 
         public DistanceOutputRecord(double totalDistance) {
-            this.totalDistance = totalDistance;
+            this.totalDistance = totalDistance + 'm';
         }
     }
 }

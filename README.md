@@ -30,33 +30,34 @@ GraST currently supports Neo4j 5.x and PostgreSQL 16 (with PostGIS extension). P
 
 GraST (Graph Storage) currently supports the following geographic calculation functions for analyzing spatial relationships and performing geographic computations:
 
-- `GraST.within(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are completely inside the geometries of entities from B.
+- `GraST.within(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A within Entity B. Return id1, id2
 
-- `GraST.contains(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A completely contain the geometries of entities from B.
+- `GraST.knn(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B, num)`: The K nearest neighbor entities B of entity A. `num` specifies the number of neighbors. Return id1, id2, distance
 
-- `GraST.coveredby(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are covered by the geometries of entities from B.
+- `GraST.withinDistance(EntityLabel_A, IDs_A, distance, EntityLabel_B, IDs_B)`: Entity B is within the specified "distance" of entity A. `distance` specified distance of A to B. Return id1, id2
 
-- `GraST.covers(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A cover the geometries of entities from B.
+- `GraST.contains(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A contains Entity B. Return id1, id2
 
-- `GraST.crosses(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A cross the geometries of entities from B.
+- `GraST.coveredby(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A coveredby Entity B. Return id1, id2
 
-- `GraST.disjoint(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are disjoint from the geometries of entities from B.
+- `GraST.covers(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A covers Entity B. Return id1, id2
 
-- `GraST.equals(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A are spatially equal to the geometries of entities from B.
+- `GraST.crosses(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A crosses Entity B. Return id1, id2
 
-- `GraST.intersects(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A intersect the geometries of entities from B.
+- `GraST.disjoint(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A disjoint Entity B. Return id1, id2
 
-- `GraST.knn(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B, num)`: Returns the IDs of entities from B that are the k-nearest neighbors to the geometries of entities from A. `num` specifies the number of neighbors to return.
+- `GraST.equals(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A equals Entity B. Return id1, id2
 
-- `GraST.length(EntityLabel_A, IDs_A)`: Returns the IDs of entities from A along with the calculated length of their geometries. 
+- `GraST.intersects(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A intersects Entity B. Return id1, id2
 
-- `GraST.overlaps(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A overlap the geometries of entities from B.
+- `GraST.overlaps(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A overlaps Entity B. Return id1, id2
 
-- `GraST.touches(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Returns the IDs of entities from A and B where the geometries of entities from A touch the geometries of entities from B.
+- `GraST.touches(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A touches Entity B. Return id1, id2
 
-- `GraST.value(EntityLabel_A, IDs_A, RasterLabel)`: Returns the IDs of entities from A along with the extracted raster values from the specified raster layer `RasterLabel` at the locations of the geometries.
+- `GraST.length(EntityLabel_A, IDs_A)`: Calculate the length of entity A. Return id1, length
+- 
+- `GraST.value(EntityLabel_A, IDs_A, RasterLabel)`: The value of the raster "RasterLabel" at the location of entity A. Return id1, raster_value
 
-- `GraST.withinDistance(EntityLabel_A, IDs_A, distance, EntityLabel_B, IDs_B)`: Returns the IDs of entities from B that are within the specified `distance` from the geometries of entities from A.
 
 Parameters
 

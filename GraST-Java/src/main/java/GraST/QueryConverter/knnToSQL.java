@@ -42,7 +42,7 @@ public class knnToSQL {
 
     private String buildKnnQuery(String table1, List<Long> ids1, String table2, List<Long> ids2, long k) {
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT a.id AS id1, b.id AS id2, ST_Distance(a.geom, b.geom) AS distance ");
+        sql.append("SELECT a.id AS id1, b.id AS id2, ST_DistanceSpheroid(ST_SetSRID(a.geom, 4326), ST_SetSRID(b.geom, 4326), 'SPHEROID[\"WGS 84\",6378137,298.257223563]') AS distance ");
         sql.append("FROM ").append(quoteIdentifier(table1)).append(" a, ").append(quoteIdentifier(table2)).append(" b ");
 
         if (!ids1.isEmpty()) {
@@ -50,10 +50,15 @@ public class knnToSQL {
         }
 
         if (!ids2.isEmpty()) {
-            sql.append("AND b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
+            if (!ids1.isEmpty()) {
+                sql.append("AND ");
+            } else {
+                sql.append("WHERE ");
+            }
+            sql.append("b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
         }
 
-        sql.append("ORDER BY a.geom <-> b.geom LIMIT ").append(k);
+        sql.append("ORDER BY ST_DistanceSpheroid(ST_SetSRID(a.geom, 4326), ST_SetSRID(b.geom, 4326), 'SPHEROID[\"WGS 84\",6378137,298.257223563]') LIMIT ").append(k);
 
         return sql.toString();
     }
@@ -66,7 +71,7 @@ public class knnToSQL {
         public KnnOutputRecord(long id1, long id2, double distance) {
             this.id1 = id1;
             this.id2 = id2;
-            this.distance = distance;
+            this.distance = distance + 'm';
         }
     }
 }

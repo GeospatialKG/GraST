@@ -27,22 +27,22 @@ public class crossesToSQL {
                 DatabaseProperties.getDbUrl(),
                 DatabaseProperties.getUser(),
                 DatabaseProperties.getPassword())) {
-            StringBuilder sql = new StringBuilder("SELECT a.id as aid, b.id as bid, ST_Crosses(a.geom, b.geom) AS isRelated ");
+            StringBuilder sql = new StringBuilder("SELECT a.id as aid, b.id as bid ");
             sql.append("FROM ").append(quoteIdentifier(table1)).append(" a, ").append(quoteIdentifier(table2)).append(" b ");
+            sql.append("WHERE ST_Crosses(a.geom, b.geom) ");
 
             if (ids1 != null && !ids1.isEmpty()) {
-                sql.append("WHERE a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
+                sql.append("AND a.id IN (").append(ids1.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
             }
             if (ids2 != null && !ids2.isEmpty()) {
-                sql.append(ids1 != null && !ids1.isEmpty() ? "AND " : "WHERE ");
-                sql.append("b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
+                sql.append("AND b.id IN (").append(ids2.stream().map(String::valueOf).collect(Collectors.joining(", "))).append(") ");
             }
 
             PreparedStatement stmt = conn.prepareStatement(sql.toString());
             ResultSet rs = stmt.executeQuery();
             Stream.Builder<OutputRecord> results = Stream.builder();
             while (rs.next()) {
-                results.add(new OutputRecord(rs.getLong("aid"), rs.getLong("bid"), rs.getBoolean("isRelated")));
+                results.add(new OutputRecord(rs.getLong("aid"), rs.getLong("bid")));
             }
             return results.build();
         } catch (Exception e) {
@@ -53,12 +53,10 @@ public class crossesToSQL {
     public static class OutputRecord {
         public long id1;
         public long id2;
-        public boolean isRelated;
 
-        public OutputRecord(long id1, long id2, boolean isRelated) {
+        public OutputRecord(long id1, long id2) {
             this.id1 = id1;
             this.id2 = id2;
-            this.isRelated = isRelated;
         }
     }
 }
