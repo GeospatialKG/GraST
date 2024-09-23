@@ -225,7 +225,12 @@ CALL GraST.value("checkins", [1,2,3,4,5], "Landsat_NDVI")
 ```
 <img src="resources/15.jpg"><br>
 
-
+### Query all check-in nodes from 10:00 to 11:00 on April 16, 2012
+```cypher
+MATCH (y:Year {value: 2012})<-[:isYearOf]-(m:Month {value: 4})<-[:isMonthOf]-(d:Day {value: 16})<-[:isDayOf]-(h:Hour {value: 10})<-[:isHourOf]-(c:checkins)
+RETURN y, m, d, h, c
+```
+<img src="resources/img_6.png"><br>
 
 ## Geospatial Data Graph Index Organization
 
