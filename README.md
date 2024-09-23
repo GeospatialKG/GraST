@@ -229,10 +229,10 @@ CALL GraST.value("checkins", [1,2,3,4,5], "Landsat_NDVI")
 
 ## Geospatial Data Graph Index Organization
 
-| Graph Index                             | resources                         |
-|:----------------------------------------|:----------------------------------|
-| - MTT Index (expanded to Day node only) | <img src="img_2.png" width="400"> |
-| - Geohash Index (drur5e as an example)  | <img src="img_3.png" width="400"> |
+| Graph Index                           | resources                           |
+|:--------------------------------------|:------------------------------------|
+| MTT Index (expanded to Day node only) | <img src="resources/img_2.png" width="400"> |
+| Geohash Index (drur5e as an example)  | <img src="resources/img_3.png" width="400">   |
 
 
 
