@@ -110,17 +110,19 @@ Please note:
 
 - For raster data, simply upload the `.tif` file.<br>
 
-<img src="FIG/img.png" width="300">  
-<img src="FIG/img.png" width="300">
+| Vector data import                 | Raster data import                |
+|:-----------------------------------|:----------------------------------|
+| <img src="FIG/img.png">|<img src="FIG/img.png">|
+
+
+
 
 ## Geospatial Data Graph Organization Example
 
 - The Geohash index of the geographic node:
-  <br><br>
   <img src="FIG/img_2.png">
 
 - The MTT index of the geographic node: Querying geographic nodes based on multi-granularity time trees:<br>
-  <br><br>
   <img src="FIG/img_3.png">
 ```cypher
 MATCH (y:Year {value: 2012})<-[:isYearOf]-(m:Month {value: 4})<-[:isMonthOf]-(d:Day {value: 16})<-[:isDayOf]-(h:Hour)<-[:isHourOf]-(c:checkins)
