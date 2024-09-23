@@ -116,21 +116,6 @@ Please note:
 
 
 
-
-## Geospatial Data Graph Organization Example
-
-- The Geohash index of the geographic node:
-  <img src="FIG/img_2.png">
-
-- The MTT index of the geographic node: Querying geographic nodes based on multi-granularity time trees:<br>
-  <img src="FIG/img_3.png">
-```cypher
-MATCH (y:Year {value: 2012})<-[:isYearOf]-(m:Month {value: 4})<-[:isMonthOf]-(d:Day {value: 16})<-[:isDayOf]-(h:Hour)<-[:isHourOf]-(c:checkins)
-RETURN y, m, d, h, c
-```
-
-
-
 ## Query Examples using GraST
 
 | Datasets                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Entity Label                      |
@@ -239,6 +224,15 @@ CALL GraST.distance("checkins", [1,2,3,4,5])
 CALL GraST.value("checkins", [1,2,3,4,5], "Landsat_NDVI")
 ```
 <img src="FIG/15.jpg"><br>
+
+
+
+## Geospatial Data Graph Index Organization
+
+| Graph Index                             | Fig                               |
+|:----------------------------------------|:----------------------------------|
+| - MTT Index (expanded to Day node only) | <img src="img_2.png" width="400"> |
+| - Geohash Index (drur5e as an example)  | <img src="img_3.png" width="400"> |
 
 
 
