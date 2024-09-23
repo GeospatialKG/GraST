@@ -7,7 +7,7 @@
 [![Neo4j Version](https://img.shields.io/badge/Neo4j-4.x-green.svg)](https://neo4j.com/download-center/)
 [![Neo4j Version](https://img.shields.io/badge/Neo4j-5.x-green.svg)](https://neo4j.com/download-center/)
 [![PostgreSQL Version](https://img.shields.io/badge/PostgreSQL-blue.svg)](https://www.postgresql.org/download/)
-
+[![PostgreSQL Version](https://img.shields.io/badge/PostGIS-blue.svg)](https://www.postgresql.org/download/)
 ## Introduction
 
 GraST is a high-performance framework for managing and querying geospatial-temporal data in graph databases. It achieves efficient querying by structurally storing geographic entities in both graph databases and relational databases, and performing data mapping and SQL conversion.
