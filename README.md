@@ -141,11 +141,7 @@ Next, we will demonstrate geospatial-temporal queries in Neo4j based on these da
 
 
 ## Queries
-YIELD id1 AS road_id
-WITH COLLECT(road_id) AS road_ids
-MATCH (r:Roads)
-WHERE r.EntityID IN road_ids
-RETURN r
+
 ### Calculate the area of each borough
 ```cypher
 CALL GraST.area('NY_Borough', [])
