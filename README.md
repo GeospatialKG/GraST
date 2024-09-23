@@ -73,7 +73,7 @@ See the Query Examples section at the end of the README for specific usage steps
 ## How to use? add GraST Library Extension to Neo4j
 
 1. Copy `GraST.jar` and `database.properties` from [Link](https://github.com/GeospatialKG/GraST/releases)
-2. Paste them into the `\plugins` folder of your Neo4j installation.
+2. Paste them into the `\plugins` folder of your Neo4j installation directory.
 3. Define the PostGIS connection information in `database.properties`:
 4. Open `neo4j.conf` and set the permissions for `dbms.security.procedures` (official way to enable plugin permissions):
 ```
