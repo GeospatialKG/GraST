@@ -55,9 +55,10 @@ public class rasterValueToSQL {
         if (pointIds != null && !pointIds.isEmpty()) {
             // 当查询特定的点时，从点表中获取 geom 和 id
             sql.append("SELECT p.id, ST_Value(r.rast, p.geom) AS raster_value ")
-                    .append("FROM ").append(rasterTable).append(" r, ")
-                    .append("(SELECT id, geom FROM ").append("\"").append(pointTable).append("\"").append(" WHERE id = ")
-                    .append(pointIds.get(0)).append(") AS p ")
+                    .append("FROM ").append(quoteIdentifier(rasterTable)).append(" r, ")
+                    .append("(SELECT id, geom FROM ").append(quoteIdentifier(pointTable)).append(" WHERE id IN (")
+                    .append(pointIds.stream().map(String::valueOf).collect(Collectors.joining(", ")))
+                    .append(")) AS p ")
                     .append("WHERE ST_Intersects(r.rast, p.geom)");
         } else {
             // 查询所有点，确保每个点的 id 和 geom 都被选择
