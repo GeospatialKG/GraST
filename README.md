@@ -4,14 +4,15 @@
 
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Neo4j Version](https://img.shields.io/badge/Neo4j-4.x-green.svg)](https://neo4j.com/download-center/)
 [![Neo4j Version](https://img.shields.io/badge/Neo4j-5.x-green.svg)](https://neo4j.com/download-center/)
-[![PostgreSQL Version](https://img.shields.io/badge/PostgreSQL-16-blue.svg)](https://www.postgresql.org/download/)
+[![PostgreSQL Version](https://img.shields.io/badge/PostgreSQL-blue.svg)](https://www.postgresql.org/download/)
 
 ## Introduction
 
 GraST is a high-performance framework for managing and querying geospatial-temporal data in graph databases. It achieves efficient querying by structurally storing geographic entities in both graph databases and relational databases, and performing data mapping and SQL conversion.
 
-GraST currently supports Neo4j 5.x and PostgreSQL 16 (with PostGIS extension). Please ensure these databases are installed before using GraST.
+GraST currently supports Neo4j and PostgreSQL (with PostGIS extension). Please ensure these databases are installed before using GraST.
 
 ## Features & Advantages
 
@@ -131,7 +132,7 @@ Next, we will demonstrate geospatial-temporal queries in Neo4j based on these da
 ```cypher
 CALL GraST.area('NY_Borough', [])
 ```
-<br><img src="img.png"><br>
+<br><img src="resources/img.png"><br>
 
 
 ### Find roads within the borough with ID=1
