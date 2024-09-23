@@ -55,7 +55,7 @@ GraST (Graph Storage) currently supports the following geographic calculation fu
 - `GraST.touches(EntityLabel_A, IDs_A, EntityLabel_B, IDs_B)`: Entity A touches Entity B. Return id1, id2
 
 - `GraST.length(EntityLabel_A, IDs_A)`: Calculate the length of entity A. Return id1, length
-- 
+
 - `GraST.value(EntityLabel_A, IDs_A, RasterLabel)`: The value of the raster "RasterLabel" at the location of entity A. Return id1, raster_value
 
 
