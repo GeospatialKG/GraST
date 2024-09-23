@@ -123,18 +123,13 @@ MATCH (y:Year {value: 2012})<-[:isYearOf]-(m:Month {value: 4})<-[:isMonthOf]-(d:
 RETURN y, m, d, h, c
 ```
 
+
+
 ## Query Examples using GraST
 
-Datasets (uploaded using DataImporter, with the following EntityLabels):
-- Landsat Collection 2 Tier 1 Level 2 32-Day NDVI Composite: `Landsat_NDVI`
-  - [Link](https://developers.google.cn/earth-engine/datasets/catalog/LANDSAT_COMPOSITES_C02_T1_L2_32DAY_NDVI)
-- NYC Borough Boundaries: `NY_Borough`
-  - [Link](https://data.cityofnewyork.us/)
-- FourSquare - NYC Check-ins: `checkins`
-  - [Link](https://www.kaggle.com/datasets/chetanism/foursquare-nyc-and-tokyo-checkin-dataset)
-- New York Road Data: `Roads`
-  - [Link](https://data.cityofnewyork.us/City-Government/NYC-Street-Centerline-CSCL-/exjm-f27b)
-  <br><img src="img_1.png" width="200"><br>
+| Datasets                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Entity Label                      |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------|
+| - Landsat 32-Day NDVI Composite: `Landsat_NDVI` [Link](https://github.com/GeospatialKG/GraST/tree/main/Data-importer/Datasets)<br>- NYC Borough Boundaries: `NY_Borough`[Link](https://github.com/GeospatialKG/GraST/tree/main/Data-importer/Datasets)<br>- FourSquare NYC Check-ins: `checkins` [Link](https://github.com/GeospatialKG/GraST/tree/main/Data-importer/Datasets)<br>- New York Road Data: `Roads` [Link](https://github.com/GeospatialKG/GraST/tree/main/Data-importer/Datasets)         | <img src="img_1.png" width="200"> |
 
 Next, we will demonstrate geospatial-temporal queries in Neo4j based on these datasets.
 
