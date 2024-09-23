@@ -242,28 +242,11 @@ CALL GraST.value("checkins", [1,2,3,4,5], "Landsat_NDVI")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-## Contributing
+## GraST Development and Contributing
 
 We welcome contributions to GraST! If you'd like to contribute, please follow the guidelines outlined in [CONTRIBUTING.md](CONTRIBUTING.md).
-
-
-## GraST Development
 
 The query conversion code for GraST is located in the `GraST-Java` directory (built on Maven). Users can extend and develop it further.
 
 After modifying the code, it needs to be packaged into a JAR file and deployed to the Neo4j plugins directory.
-
-
-```
 
