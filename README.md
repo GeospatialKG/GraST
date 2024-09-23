@@ -113,13 +113,15 @@ Please note:
 
 - For raster data, simply upload the `.tif` file.<br>
 
-| Vector data import             | Raster data import              |
-|:-------------------------------|:--------------------------------|
-| <img src="resources/impo.png"> | <img src="resources/impo1.png"> |
+| Vector data import                        | Raster data import                        |
+|:------------------------------------------|:------------------------------------------|
+| <img src="resources/impo1.jpg" width=400> | <img src="resources/impo2.jpg" width=400> |
 
 
 
 ## Query Examples using GraST
+
+Use Data Importer to import geospatial data to Neo4j & PostGIS. Please pay attention to the naming of Entity Label.
 
 | Datasets                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Entity Label                      |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------|
