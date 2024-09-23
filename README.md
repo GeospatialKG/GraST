@@ -73,7 +73,9 @@ See the Query Examples section at the end of the README for specific usage steps
 ## How to use? add GraST Library Extension to Neo4j
 
 1. Copy `GraST.jar` and `database.properties` from [Link](https://github.com/GeospatialKG/GraST/releases)
-2. Paste them into the `\plugins` folder of your Neo4j installation directory.
+    - For Neo4j version 4.x: GraST-neo4.x.jar
+    - For Neo4j version 5.x: GraST-neo5.x.jar
+3. Paste them into the `\plugins` folder of your Neo4j installation directory.
 3. Define the PostGIS connection information in `database.properties`:
 4. Open `neo4j.conf` and set the permissions for `dbms.security.procedures` (official way to enable plugin permissions):
 ```
@@ -247,6 +249,9 @@ RETURN y, m, d, h, c
 We welcome contributions to GraST! If you'd like to contribute, please follow the guidelines outlined in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The query conversion code for GraST is located in the `GraST-Java` directory (built on Maven). Users can extend and develop it further.
+Development requirements:
+   - For Neo4j 5.x: Use JDK 17
+   - For Neo4j 4.x: Use JDK 11
 
 After modifying the code, it needs to be packaged into a JAR file and deployed to the Neo4j plugins directory.
 
