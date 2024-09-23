@@ -156,92 +156,92 @@ CALL GraST.area('NY_Borough', [])
 ```cypher
 CALL GraST.within("Roads", [], "NY_Borough", [1])
 ```
-<img src="img.png"><br>
+<img src="FIG/1.jpg"><br>
 
 ### Find check-ins within 100 units of a specific road (ID=1)
 ```cypher
 CALL GraST.withinDistance("checkins", [], 100, "Roads", [1])
 ```
-<img src="FIG/1.jpg" width="700"><br>
+<img src="FIG/2.jpg"><br>
 
 ### Find roads contained by the borough with ID=1
 ```cypher
 CALL GraST.contains("NY_Borough", [1], "Roads", [])
 ```
-<img src="FIG/2.jpg" width="700"><br>
+<img src="FIG/3.jpg"><br>
 
 
 ### Find the 100 nearest check-ins to the check-in with ID=1
 ```cypher
 CALL GraST.knn("checkins", [1], "checkins", [], 100)
 ```
-<img src="FIG/3.jpg" width="700"><br>
+<img src="FIG/4.jpg"><br>
 
 ### Find check-ins covered by the borough with ID=1
 ```cypher
 CALL GraST.coveredby("checkins", [], "NY_Borough", [1])
 ```
-<img src="FIG/3.jpg" width="700"><br>
+<img src="FIG/5.jpg"><br>
 
 ### Find entities covered by the borough with ID=1
 ```cypher
 CALL GraST.covers("NY_Borough", [1], "checkins", [])
 ```
-<img src="FIG/4.jpg" width="700"><br>
+<img src="FIG/6.jpg"><br>
 
 ### Find boroughs crossed by the road with ID=4527
 ```cypher
 CALL GraST.crosses("Roads", [4527], "NY_Borough", [])
 ```
-<img src="FIG/5.jpg" width="700"><br>
+<img src="FIG/7.jpg"><br>
 
 ### Find boroughs disjoint from the road with ID=4527
 ```cypher
 CALL GraST.disjoint("Roads", [4527], "NY_Borough", [])
 ```
-<img src="FIG/6.jpg" width="700"><br>
+<img src="FIG/8.jpg"><br>
 
 ### Find roads equal to the road with ID=4527
 ```cypher
 CALL GraST.equals("Roads", [4527], "Roads", [])
 ```
-<img src="FIG/7.jpg" width="700"><br>
+<img src="FIG/9.jpg"><br>
 
 ### Find roads intersecting with the road with ID=4527
 ```cypher
 CALL GraST.intersects("Roads", [4527], "Roads", [])
 ```
-<img src="FIG/8.jpg" width="700"><br>
+<img src="FIG/10.jpg"><br>
 
 ### Find boroughs overlapping with the borough with ID=3
 ```cypher
 CALL GraST.overlaps("NY_Borough", [3], "NY_Borough", [])
 ```
-<img src="FIG/9.jpg" width="700"><br>
+<img src="FIG/11.jpg"><br>
 
 ### Find boroughs touching the borough with ID=5
 ```cypher
 CALL GraST.touches("NY_Borough", [5], "NY_Borough", [])
 ```
-<img src="FIG/10.jpg" width="700"><br>
+<img src="FIG/12.jpg"><br>
 
 ### Calculate the perimeter of the borough with ID=5
 ```cypher
 CALL GraST.length("NY_Borough", [5])
 ```
-<img src="FIG/11.jpg" width="700"><br>
+<img src="FIG/13.jpg"><br>
 
 ### Calculate the total distance from check-in 1 to 2 to 3 to 4 to 5
 ```cypher
 CALL GraST.distance("checkins", [1,2,3,4,5])
 ```
-<img src="FIG/12.jpg" width="700"><br>
+<img src="FIG/14.jpg"><br>
 
 ### Query the NDVI values at check-ins with IDs 1, 2, 3, 4, and 5
 ```cypher
 CALL GraST.value("checkins", [1,2,3,4,5], "Landsat_NDVI")
 ```
-<img src="FIG/13.jpg" width="700"><br>
+<img src="FIG/15.jpg"><br>
 
 
 
