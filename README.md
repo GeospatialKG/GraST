@@ -106,10 +106,12 @@ pip install .\GDAL-3.8.2-cp310-cp310-win_amd64.whl
 
 Please note:
 - For vector data, compress the `.shp`, `.dbf`, and other files into a ZIP file and upload it using the Data Importer. Three sample files are provided in the `Datasets` directory: `borough.zip`, `check-ins.zip`, and `NY_POIs.zip`.<br>
-  <img src="FIG/img.png" width="300">
+
 
 - For raster data, simply upload the `.tif` file.<br>
-  <img src="FIG/img.png" width="300">
+
+<img src="FIG/img.png" width="300">  
+<img src="FIG/img.png" width="300">
 
 ## Geospatial Data Graph Organization Example
 
