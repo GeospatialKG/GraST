@@ -110,9 +110,9 @@ Please note:
 
 - For raster data, simply upload the `.tif` file.<br>
 
-| Vector data import            | Raster data import            |
-|:------------------------------|:------------------------------|
-| <img src="resources/img.png"> | <img src="resources/img.png"> |
+| Vector data import             | Raster data import              |
+|:-------------------------------|:--------------------------------|
+| <img src="resources/impo.png"> | <img src="resources/impo1.png"> |
 
 
 
