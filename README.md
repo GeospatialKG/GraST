@@ -113,11 +113,13 @@ Please note:
 
 ## Geospatial Data Graph Organization Example
 
-- The Geohash index of the geographic node:<br>
-  <img src="FIG/img_2.png" width="460">
+- The Geohash index of the geographic node:
+  <br><br>
+  <img src="FIG/img_2.png">
 
 - The MTT index of the geographic node: Querying geographic nodes based on multi-granularity time trees:<br>
-  <img src="FIG/img_3.png" width="460">
+  <br><br>
+  <img src="FIG/img_3.png">
 ```cypher
 MATCH (y:Year {value: 2012})<-[:isYearOf]-(m:Month {value: 4})<-[:isMonthOf]-(d:Day {value: 16})<-[:isDayOf]-(h:Hour)<-[:isHourOf]-(c:checkins)
 RETURN y, m, d, h, c
