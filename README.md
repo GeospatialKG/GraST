@@ -69,7 +69,7 @@ Parameters
 See the Query Examples section at the end of the README for specific usage steps and sample queries using GraST functions.
 
 
-## How to use? Add GraST Library Extension to Neo4j
+## How to use? add GraST Library Extension to Neo4j
 
 1. Copy `GraST.jar` and `database.properties` from [Link](https://github.com/GeospatialKG/GraST/releases)
 2. Paste them into the `\plugins` folder of your Neo4j installation.
