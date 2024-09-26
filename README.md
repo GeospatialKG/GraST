@@ -108,10 +108,9 @@ pip install .\GDAL-3.8.2-cp310-cp310-win_amd64.whl
 3. Open your web browser and navigate to `http://127.0.0.1:8000` to access the GraST data importer.
 
 Please note:
-- For vector data, compress the `.shp`, `.dbf`, and other files into a ZIP file and upload it using the Data Importer. Three sample files are provided in the `Datasets` directory: `borough.zip`, `check-ins.zip`, and `NY_POIs.zip`.<br>
+- For vector data, compress the `.shp`, `.dbf`, and other files into a ZIP file and upload it using the Data Importer. Three sample files are provided in the `Datasets` directory: `NY_Borough.zip`, `NY_Roads.zip`, and `check-ins.zip`.<br>
 
-
-- For raster data, simply upload the `.tif` file.<br>
+- For raster data, simply upload the `.tif` file. One sample file is provided in the `Datasets` directory: `Landsat_NDVI.tif`.<br>
 
 | Vector data import                        | Raster data import                        |
 |:------------------------------------------|:------------------------------------------|
