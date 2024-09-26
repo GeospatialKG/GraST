@@ -144,13 +144,13 @@ CALL GraST.within("Roads", [], "NY_Borough", [1])
 ```
 <img src="resources/1.jpg"><br>
 
-### Find check-ins within 100 units of a specific road (roadID=1)
+### Find check-ins within 100m of a specific road (roadID=1)
 ```cypher
 CALL GraST.withinDistance("checkins", [], 100, "Roads", [1])
 ```
 <img src="resources/2.jpg"><br>
 
-### Find roads contained by a specific borough (boroughID=1)
+### Find roads that a specific borough contains (boroughID=1)
 ```cypher
 CALL GraST.contains("NY_Borough", [1], "Roads", [])
 ```
@@ -169,7 +169,7 @@ CALL GraST.coveredby("checkins", [], "NY_Borough", [1])
 ```
 <img src="resources/5.jpg"><br>
 
-### Find entities covered by a specific borough (boroughID=1)
+### Find check-ins that a specific borough covers (boroughID=1)
 ```cypher
 CALL GraST.covers("NY_Borough", [1], "checkins", [])
 ```
