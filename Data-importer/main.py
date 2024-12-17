@@ -13,9 +13,11 @@ app = FastAPI()
 static_files_path = "Client"
 app.mount("/GraST/static", StaticFiles(directory=static_files_path), name="static")
 
+
 @app.get("/")
 async def root():
     return RedirectResponse(url="/GraST", status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+
 
 @app.get("/GraST", response_class=HTMLResponse)
 async def main():
