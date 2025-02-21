@@ -76,7 +76,7 @@ See the Query Examples section at the end of the README for specific usage steps
     - For Neo4j version 4.x: GraST-neo4.x.jar
     - For Neo4j version 5.x: GraST-neo5.x.jar
 3. Paste them into the `\plugins` folder of your Neo4j installation directory.
-3. Define the PostGIS connection information in `database.properties`:
+3. Define the PostGIS connection information `database.properties` in the `\plugins` folder:
 4. Open `neo4j.conf` and set the permissions for `dbms.security.procedures` (official way to enable plugin permissions):
 ```
 dbms.security.procedures.unrestricted=....,GraST.*
