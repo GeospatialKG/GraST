@@ -162,7 +162,7 @@ async def upload_shp(
             if timeColumnSelect == 'true' and 'time' in gdf.columns:
                 columns_to_write.append('time')
                 dtype['time'] = TIMESTAMP(timezone=False)
-                gdf['time'] = pd.to_datetime(gdf['time'], unit='s', utc=True)
+                gdf['time'] = pd.to_datetime(gdf['time'], utc=True)
 
             gdf[columns_to_write].to_sql(entityClass, engine, if_exists='replace', index=True,
                                          dtype=dtype, method=None)
